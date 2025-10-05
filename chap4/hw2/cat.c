@@ -11,13 +11,18 @@ int main(int argc, char *argv[])
 				fp = stdin;
 			else fp = fopen(argv[i], "r");
 			
-			printf("%3d ", lineNum);
-			lineNum++;
-
 			c = getc(fp);
+			if (c != EOF)
+				printf("%3d ", lineNum++);
 			while (c != EOF) {
 				putc(c, stdout);
-				c = getc(fp);
+				if (c == '\n') {
+					c = getc(fp);
+					if (c != EOF)
+						printf("%3d ", lineNum++);
+				}
+				else
+					c = getc(fp);
 			}
 			fclose(fp);
 		}
