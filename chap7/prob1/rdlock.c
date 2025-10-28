@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 	}
 
 	printf("\nEnter StudentID to search : ");
-	while (scanf("%d", &id) == -1) {
+	while (scanf("%d", &id) == 1) {
 		lock.l_type = F_RDLCK;
 		lock.l_whence = SEEK_SET;
 		lock.l_start = (id-START_ID)*sizeof(record);
