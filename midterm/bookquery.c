@@ -7,7 +7,7 @@
 int main(int argc, char *argv[])
 {
 	int fd, id;
-	char c; 
+	int c; 
 	struct book record;
 	if (argc < 2) {
 		fprintf(stderr, "How to use : %s file\n", argv[0]);
@@ -19,16 +19,22 @@ int main(int argc, char *argv[])
 	}
 
 	printf("--bookquery--\n");
-	id = 1;
-	while(id != 4) {
+	do{
 		printf("0: list of all books, 1: list of available books ) ");
-		scanf ("%c", &c);
-		printf("%-4s %-11s %-11s %-7s %-11s %-6s\n", "id", "bookname", "author", "year", "numofborrow", "borrow");
-		lseek(fd, (id-START_ID)*sizeof(record), SEEK_SET);
-		if ((read(fd, (char *) &record, sizeof(record)) > 0 && (record.id != 0))
-			printf("%-4d %-11s %-11s %-7d %-11d %-6d\n", record.id, record.bookname, record.author, record.year, record.numofborrow, record.borrow);
-		id++;
-	}
+		scanf ("%d", &c);
+		printf("%4s %11s %11s %7s %11s %6s\n", "id", "bookname", "author", "year", "numofborrow", "borrow");
+		lseek(fd, 0L, SEEK_SET);
+		while (read(fd, (char *) &record, sizeof(record)) > 0 && record.id != 0) {
+			if (c == 0) {
+				printf("%4d %11s %11s %7d %11d %6s\n", record.id, record.bookname, record.author, record.year, record.numofborrow, (record.borrow ? "True" : "False"));
+			}
+			if (c == 1) {
+				if (record.borrow == 1) {
+					printf("%4d %11s %11s %7d %11d %6s\n", record.id, record.bookname, record.author, record.year, record.numofborrow, (record.borrow ? "True" : "False"));
+				}
+			}
+		}
+	} while (1);
 	close(fd);
 	exit(0);
 }
